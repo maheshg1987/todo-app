@@ -1,6 +1,12 @@
 # Compiled class file
 *.class
 
+/target
+.classpath
+.factorypath
+.project
+.settings
+
 # Log file
 *.log
 
