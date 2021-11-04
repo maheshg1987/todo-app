@@ -18,7 +18,7 @@ public class TodoDTOMapper {
 		todo.setName(dto.getName());
 		todo.setDescription(dto.getDescription());
 		todo.setDueDate(dto.getDueDate());
-		todo.setStatus(dto.getStatus());
+		todo.setStatus(dto.getStatus().toLowerCase());
 		return todo;
 	}
 
@@ -27,7 +27,7 @@ public class TodoDTOMapper {
 		todo.setName(todoDTO.getName());
 		todo.setDescription(todoDTO.getDescription());
 		todo.setDueDate(todoDTO.getDueDate());
-		todo.setStatus(todoDTO.getStatus());
+		todo.setStatus(todoDTO.getStatus().toLowerCase());
 		return todo;
 
 	}

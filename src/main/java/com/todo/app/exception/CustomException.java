@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * The Class ResourceNotFoundException.
  */
-public class ResourceNotFoundException extends Exception implements Serializable {
+public class CustomException extends Exception implements Serializable {
 
 	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = 8201016414290340752L;
@@ -15,7 +15,7 @@ public class ResourceNotFoundException extends Exception implements Serializable
 	 *
 	 * @param message the message
 	 */
-	public ResourceNotFoundException(String message) {
+	public CustomException(String message) {
 		super(message);
 	}
 

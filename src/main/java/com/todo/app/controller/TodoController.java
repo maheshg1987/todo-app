@@ -23,7 +23,7 @@ import com.todo.app.constant.MessageConstant;
 import com.todo.app.dao.TodoRepository;
 import com.todo.app.dto.TodoDTO;
 import com.todo.app.dto.mapper.TodoDTOMapper;
-import com.todo.app.exception.ResourceNotFoundException;
+import com.todo.app.exception.CustomException;
 import com.todo.app.model.Todo;
 
 /**
@@ -41,14 +41,19 @@ public class TodoController {
 	 *
 	 * @param todoDTO the todo's DTO
 	 * @return the response entity
+	 * @throws Exception
 	 */
 	@PostMapping("/todo")
-	public ResponseEntity<Todo> createTodo(@RequestBody TodoDTO todoDTO) {
+	public ResponseEntity<Todo> createTodo(@RequestBody TodoDTO todoDTO) throws CustomException {
 		try {
-			Todo todo = todoRepository.save(TodoDTOMapper.todoOnPersists(todoDTO));
-			return new ResponseEntity<>(todo, HttpStatus.CREATED);
-		} catch (Exception e) {
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+			if (MessageConstant.DONE.mesg().equalsIgnoreCase(todoDTO.getStatus())
+					|| MessageConstant.PENDING.mesg().equalsIgnoreCase(todoDTO.getStatus())) {
+				Todo todo = todoRepository.save(TodoDTOMapper.todoOnPersists(todoDTO));
+				return new ResponseEntity<>(todo, HttpStatus.CREATED);
+			}
+			throw new CustomException(MessageConstant.VALIDATE_STATUS.mesg());
+		} catch (CustomException e) {
+			throw new CustomException(e.getMessage());
 		}
 	}
 
@@ -66,7 +71,7 @@ public class TodoController {
 			if (StringUtils.isBlank(status)) {
 				todoRepository.findAll().forEach(todo::add);
 			} else {
-				todoRepository.findByStatus(status).forEach(todo::add);
+				todoRepository.findByStatus(status.toLowerCase()).forEach(todo::add);
 			}
 			if (todo.isEmpty()) {
 				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -82,30 +87,34 @@ public class TodoController {
 	 *
 	 * @param id the id
 	 * @return the todoEntity by id
-	 * @throws ResourceNotFoundException the resource not found exception
+	 * @throws CustomException the resource not found exception
 	 */
 	@GetMapping("/todo/{id}")
-	public ResponseEntity<Todo> getTodoById(@PathVariable("id") long id) throws ResourceNotFoundException {
+	public ResponseEntity<Todo> getTodoById(@PathVariable("id") long id) throws CustomException {
 		Todo todoData = todoRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.TODO_NOT_FOUND.mesg() + id));
+				.orElseThrow(() -> new CustomException(MessageConstant.TODO_NOT_FOUND.mesg() + id));
 		return ResponseEntity.ok().body(todoData);
 	}
 
 	/**
 	 * Update todoEntity.
 	 *
-	 * @param id the id
+	 * @param id      the id
 	 * @param todoDTO the todo's DTO
 	 * @return the response entity
-	 * @throws ResourceNotFoundException the resource not found exception
+	 * @throws CustomException the resource not found exception
 	 */
 	@PutMapping("/todo/{id}")
 	public ResponseEntity<Todo> updateTodo(@PathVariable("id") long id, @RequestBody TodoDTO todoDTO)
-			throws ResourceNotFoundException {
+			throws CustomException {
 		Todo todoData = todoRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.TODO_NOT_FOUND.mesg() + id));
-		return new ResponseEntity<>(todoRepository.save(TodoDTOMapper.todoOnUpdate(todoData, todoDTO)), HttpStatus.OK);
-
+				.orElseThrow(() -> new CustomException(MessageConstant.TODO_NOT_FOUND.mesg() + id));
+		if (MessageConstant.DONE.mesg().equalsIgnoreCase(todoDTO.getStatus())
+				|| MessageConstant.PENDING.mesg().equalsIgnoreCase(todoDTO.getStatus())) {
+			return new ResponseEntity<>(todoRepository.save(TodoDTOMapper.todoOnUpdate(todoData, todoDTO)),
+					HttpStatus.OK);
+		}
+		throw new CustomException(MessageConstant.VALIDATE_STATUS.mesg());
 	}
 
 	/**
@@ -113,12 +122,12 @@ public class TodoController {
 	 *
 	 * @param id the id
 	 * @return the map
-	 * @throws ResourceNotFoundException the resource not found exception
+	 * @throws CustomException the resource not found exception
 	 */
 	@DeleteMapping("/todo/{id}")
-	public Map<String, Boolean> deleteTodo(@PathVariable("id") long id) throws ResourceNotFoundException {
+	public Map<String, Boolean> deleteTodo(@PathVariable("id") long id) throws CustomException {
 		Todo todoData = todoRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.TODO_NOT_FOUND.mesg() + id));
+				.orElseThrow(() -> new CustomException(MessageConstant.TODO_NOT_FOUND.mesg() + id));
 		todoRepository.delete(todoData);
 		Map<String, Boolean> response = new HashMap<>();
 		response.put(MessageConstant.TODO_DELETD.mesg(), Boolean.TRUE);
