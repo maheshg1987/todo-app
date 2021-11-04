@@ -12,8 +12,8 @@ Todo app supports number of http method like (GET,POST,PUT,DELETE) <br/>
 **POST** <br/>
 http://localhost:8080/api/todo/ <br/>
 {"name": "mahesh",
-    "description": "bye",
-    "dueDate": "2007-12-03",
+    "description": "test user",
+    "dueDate": "2021-11-03",
     "status": "active"} <br/>
     
  **GET** <br/>
@@ -21,9 +21,9 @@ http://localhost:8080/api/todo/ <br/>
  
  **PUT**<br/>
  http://localhost:8080/api/todo/{id} <br/>
-{"name": "mahesh",
-    "description": "bye",
-    "dueDate": "2007-12-03",
+{"name": "mahesh guruge",
+    "description": "test user",
+    "dueDate": "2021-11-03",
     "status": "active"} <br/>
     
  **DELETE**<br/>

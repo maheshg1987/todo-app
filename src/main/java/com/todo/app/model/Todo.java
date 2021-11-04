@@ -10,7 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
- * The Class Todo.
+ * The Class TodoApp.
  */
 @Entity
 @Table(name = "todo")
@@ -38,14 +38,14 @@ public class Todo {
 	private String status;
 
 	/**
-	 * Instantiates a new todo.
+	 * Instantiates a new TodoApp.
 	 */
 	public Todo() {
 
 	}
 
 	/**
-	 * Instantiates a new todo.
+	 * Instantiates a new TodoApp.
 	 *
 	 * @param name        the name
 	 * @param description the description
