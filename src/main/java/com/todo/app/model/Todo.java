@@ -31,7 +31,7 @@ public class Todo {
 
 	/** The due date. */
 	@Column(name = "dueDate")
-	private LocalDate dueDate;
+	private String dueDate;
 
 	/** The status. */
 	@Column(name = "status")
@@ -52,7 +52,7 @@ public class Todo {
 	 * @param dueDate     the due date
 	 * @param status      the status
 	 */
-	public Todo(String name, String description, LocalDate dueDate, String status) {
+	public Todo(String name, String description, String dueDate, String status) {
 		super();
 		this.name = name;
 		this.description = description;
@@ -84,11 +84,11 @@ public class Todo {
 		this.description = description;
 	}
 
-	public LocalDate getDueDate() {
+	public String getDueDate() {
 		return dueDate;
 	}
 
-	public void setDueDate(LocalDate dueDate) {
+	public void setDueDate(String dueDate) {
 		this.dueDate = dueDate;
 	}
 

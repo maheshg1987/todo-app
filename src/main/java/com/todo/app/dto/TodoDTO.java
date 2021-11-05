@@ -1,7 +1,5 @@
 package com.todo.app.dto;
 
-import java.time.LocalDate;
-
 /**
  * The Class TodoDTO.
  */
@@ -14,7 +12,7 @@ public class TodoDTO {
 	private String description;
 	
 	/** The due date. */
-	private LocalDate dueDate;
+	private String dueDate;
 	
 	/** The status. */
 	private String status;
@@ -60,7 +58,7 @@ public class TodoDTO {
 	 *
 	 * @return the due date
 	 */
-	public LocalDate getDueDate() {
+	public String getDueDate() {
 		return dueDate;
 	}
 	
@@ -69,7 +67,7 @@ public class TodoDTO {
 	 *
 	 * @param dueDate the new due date
 	 */
-	public void setDueDate(LocalDate dueDate) {
+	public void setDueDate(String dueDate) {
 		this.dueDate = dueDate;
 	}
 	
