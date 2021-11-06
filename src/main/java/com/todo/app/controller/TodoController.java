@@ -26,6 +26,7 @@ import com.todo.app.dto.TodoDTO;
 import com.todo.app.dto.mapper.TodoDTOMapper;
 import com.todo.app.exception.CustomException;
 import com.todo.app.model.Todo;
+import com.todo.app.util.InputValidation;
 
 /**
  * The Class TodoController.
@@ -35,6 +36,7 @@ import com.todo.app.model.Todo;
 @RequestMapping("/api")
 public class TodoController {
 
+	/** The todo repository. */
 	@Autowired
 	TodoRepository todoRepository;
 
@@ -43,17 +45,15 @@ public class TodoController {
 	 *
 	 * @param todoDTO the todo's DTO
 	 * @return the response entity
-	 * @throws Exception
+	 * @throws CustomException the custom exception
 	 */
 	@PostMapping("/todo")
 	public ResponseEntity<Todo> createTodo(@RequestBody TodoDTO todoDTO) throws CustomException {
 		try {
-			if (MessageConstant.DONE.mesg().equalsIgnoreCase(todoDTO.getStatus())
-					|| MessageConstant.PENDING.mesg().equalsIgnoreCase(todoDTO.getStatus())) {
-				Todo todo = todoRepository.save(TodoDTOMapper.todoOnPersists(todoDTO));
-				return new ResponseEntity<>(todo, HttpStatus.CREATED);
-			}
-			throw new CustomException(MessageConstant.VALIDATE_STATUS.mesg());
+			InputValidation.validateOnCreation(todoDTO);
+			Todo todo = todoRepository.save(TodoDTOMapper.todoOnPersists(todoDTO));
+			return new ResponseEntity<>(todo, HttpStatus.CREATED);
+
 		} catch (CustomException e) {
 			throw new CustomException(e.getMessage());
 		}
@@ -111,12 +111,9 @@ public class TodoController {
 			throws CustomException {
 		Todo todoData = todoRepository.findById(id)
 				.orElseThrow(() -> new CustomException(MessageConstant.TODO_NOT_FOUND.mesg() + id));
-		if (MessageConstant.DONE.mesg().equalsIgnoreCase(todoDTO.getStatus())
-				|| MessageConstant.PENDING.mesg().equalsIgnoreCase(todoDTO.getStatus())) {
-			return new ResponseEntity<>(todoRepository.save(TodoDTOMapper.todoOnUpdate(todoData, todoDTO)),
-					HttpStatus.OK);
-		}
-		throw new CustomException(MessageConstant.VALIDATE_STATUS.mesg());
+		InputValidation.validateOnUpdate(todoDTO);
+		return new ResponseEntity<>(todoRepository.save(TodoDTOMapper.todoOnUpdate(todoData, todoDTO)),
+				HttpStatus.OK);
 	}
 
 	/**
