@@ -13,7 +13,10 @@ This application have used H2 inmemory databased. <br/>
 
 	1. Open the browser and enter the url [ access url : http://localhost:8080/h2-console ]
 	2. Change the JDBC URL in login window as [ jdbc:h2:mem:tododb ]
-	3. verify the database logging.
+	3. Enter User name as [sa]
+	4. Keep password field empty
+	5. Click Connect
+	6. verify the database logging.
 
 ###How to test API 
 Todo rest-api supports number of http method like (GET,POST,PUT,DELETE) <br/>
